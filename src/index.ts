@@ -27,6 +27,25 @@ async function writeFileExample(filePath: string, content: string): Promise<void
   }
   
 
+  async function appendFileExample(filePath: string, content: string): Promise<void> {
+    try {
+      await appendFile(filePath, content, 'utf8');
+      console.log('Content appended successfully');
+    } catch (err) {
+      console.error('Error appending to file:', err);
+    }
+  }
+
+  async function deleteFileExample(filePath: string): Promise<void> {
+    try {
+      await unlink(filePath);
+      console.log('File deleted successfully');
+    } catch (err) {
+      console.error('Error deleting file:', err);
+    }
+  }
+  
+
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`)
     }
