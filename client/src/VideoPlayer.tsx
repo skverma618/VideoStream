@@ -7,12 +7,14 @@ const VideoPlayer: React.FC<{ videoUrl: string }> = ({ videoUrl }) => {
 
     const fetchVideo = async (range: string) => {
         try {
-            const response = await axios.get(videoUrl, {
+            const response = await axios.get('http://localhost:8000/video/1', {
                 responseType: 'blob', // Ensure the response is treated as a Blob
                 headers: {
                     Range: range,
                 },
             });
+
+            console.log('Fetched video chunk:', response.data);
 
             const videoBlob = new Blob([response.data], { type: 'video/mp4' });
             const video = URL.createObjectURL(videoBlob);

@@ -1,9 +1,15 @@
 import express from 'express'
 import * as fs from 'fs';
-
+import path from 'path';
+import cors from 'cors';
 
 const app = express()
 const port = 8000
+
+app.use(cors());
+app.use(express.json());
+
+const currentDir = __dirname;
 
 app.get('/', (req, res) => {
     res.send('Video Stream API Running!!')
@@ -22,7 +28,8 @@ app.get('/video/:videoId', async (req, res) => {
     }
 
     const videoDirectory = 'videos';
-    const filePath = `${videoDirectory}/${videoId}.mp4`;
+    const fileName = `Creating a Powerful Admin Panel with admin.js.mp4`;
+    const filePath = path.join(currentDir, videoDirectory, fileName);
 
     const stats = await fs.statSync(filePath);
     const videoSize = stats.size;
