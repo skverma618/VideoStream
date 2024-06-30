@@ -4,17 +4,17 @@ const VideoFrame = ({ videoId }) => {
   const videoUrl = `http://localhost:8000/video/${videoId}`;
   const handleCanPlayThrough = () => {
     // Video is ready to start playing
-    console.log('Video can play through');
-};
+    console.log("Video can play through");
+  };
   return (
     <div
       className="video-player"
-      style={{ maxWidth: "600px", margin: "0 auto" }}
+      style={{ maxWidth: "810px", margin: "0 auto" }}
     >
       <video
         controls
         src={videoUrl}
-        style={{ maxWidth: "600px", margin: "0 auto" }}
+        style={{ maxWidth: "810px", margin: "0 auto" }}
         onCanPlayThrough={handleCanPlayThrough}
       />
     </div>

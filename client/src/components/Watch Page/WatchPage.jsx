@@ -9,6 +9,7 @@ import VideoDescription from "./VideoDescription";
 import VideoComments from "./VideoComments";
 import SideVideos from "./SideVideos";
 import { YOUTUBE_SEARCH_RESULT_VIDEOS } from "../../ultils/Constants";
+import CustomVideoPlayer from "./CustomVideoPlayer";
 
 const WatchPage = () => {
   const [comments, setComments] = useState([]);
@@ -77,18 +78,19 @@ const WatchPage = () => {
   //   getSideVideo();
   // }, [videoTitle]);
 
-  // console.log(sideVideos);
-  if (sideVideos.length === 0) {
-    return "...";
-  }
 
-  if (comments.length == 0) return "";
+  // if (sideVideos.length === 0) {
+  //   return "...";
+  // }
+
+  // if (comments.length == 0) return "";
 
   console.log("watch page")
   return (
     <div className={` flex mt-14 mr-5 ${isMenuOpen ? "ml-48" : "ml-16"}`}>
       <div className="w-[59%]">
-        <VideoFrame videoId={videoId} />
+        {/* <VideoFrame videoId={videoId} /> */}
+        <CustomVideoPlayer videoId={videoId} />
         {/* <VideoData snippet={snippet} statistics={statistics} /> */}
         {/* <VideoDescription data={{ snippet, showFull, showLess }} /> */}
         {/* {comments.length > 0 ? (
