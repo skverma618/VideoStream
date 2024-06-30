@@ -6,7 +6,7 @@ import VideoPlayer from './VideoPlayer';
 function App() {
   return (
     <div className="App">
-      <VideoPlayer videoUrl="http://localhost:4000/video" />
+      <VideoPlayer videoId="1" />
     </div>
   );
 }

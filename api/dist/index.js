@@ -68,14 +68,16 @@ var path_1 = __importDefault(require("path"));
 var cors_1 = __importDefault(require("cors"));
 var app = (0, express_1.default)();
 var port = 8000;
-app.use((0, cors_1.default)());
+app.use((0, cors_1.default)({
+    exposedHeaders: ['Content-Range', 'Accept-Ranges', 'Content-Length']
+}));
 app.use(express_1.default.json());
 var currentDir = __dirname;
 app.get('/', function (req, res) {
     res.send('Video Stream API Running!!');
 });
 app.get('/video/:videoId', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var videoId, range, videoDirectory, fileName, filePath, stats, videoSize, parts, start, end, contentLength, headers, videoStream;
+    var videoId, range, videoDirectory, fileName, filePath, stats, videoSize, parts, start, end, contentLength, headers, videoStream, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -90,16 +92,17 @@ app.get('/video/:videoId', function (req, res) { return __awaiter(void 0, void 0
                 videoDirectory = 'videos';
                 fileName = "Creating a Powerful Admin Panel with admin.js.mp4";
                 filePath = path_1.default.join(currentDir, videoDirectory, fileName);
-                return [4 /*yield*/, fs.statSync(filePath)];
+                _a.label = 1;
             case 1:
+                _a.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, fs.promises.stat(filePath)];
+            case 2:
                 stats = _a.sent();
                 videoSize = stats.size;
-                console.log('Video size:', videoSize);
                 parts = range.replace(/bytes=/, "").split("-");
                 start = parseInt(parts[0], 10);
-                end = parts[1] ? parseInt(parts[1], 10) : videoSize - 1;
-                contentLength = end - start + 1;
-                console.log('Range:', start, end);
+                end = Math.min(start + 1000000 - 1, videoSize - 1);
+                contentLength = (end - start) + 1;
                 headers = {
                     'Content-Range': "bytes ".concat(start, "-").concat(end, "/").concat(videoSize),
                     'Accept-Ranges': 'bytes',
@@ -109,7 +112,20 @@ app.get('/video/:videoId', function (req, res) { return __awaiter(void 0, void 0
                 res.writeHead(206, headers);
                 videoStream = fs.createReadStream(filePath, { start: start, end: end });
                 videoStream.pipe(res);
-                return [2 /*return*/];
+                videoStream.on('end', function () {
+                    console.log("Finished streaming ".concat(fileName));
+                });
+                videoStream.on('error', function (error) {
+                    console.error("Error streaming video: ".concat(error));
+                    res.status(500).send('Error streaming video');
+                });
+                return [3 /*break*/, 4];
+            case 3:
+                error_1 = _a.sent();
+                console.error("Error accessing video file: ".concat(error_1));
+                res.status(500).send('Error accessing video file');
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
         }
     });
 }); });

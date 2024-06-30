@@ -1,26 +1,30 @@
-import express from 'express'
+import express from 'express';
 import * as fs from 'fs';
 import path from 'path';
 import cors from 'cors';
 
-const app = express()
-const port = 8000
+const app = express();
+const port = 8000;
 
-app.use(cors());
+// This is important that you may miss out on
+app.use(cors({
+    exposedHeaders: ['Content-Range', 'Accept-Ranges', 'Content-Length']
+}));
+
 app.use(express.json());
 
 const currentDir = __dirname;
 
 app.get('/', (req, res) => {
-    res.send('Video Stream API Running!!')
-})
+    res.send('Video Stream API Running!!');
+});
 
 app.get('/video/:videoId', async (req, res) => {
     const { videoId } = req.params;
     const range = req.headers.range;
 
     if (!videoId) {
-        return res.status(400).send('No videoId provided')
+        return res.status(400).send('No videoId provided');
     }
 
     if (!range) {
@@ -31,31 +35,43 @@ app.get('/video/:videoId', async (req, res) => {
     const fileName = `Creating a Powerful Admin Panel with admin.js.mp4`;
     const filePath = path.join(currentDir, videoDirectory, fileName);
 
-    const stats = await fs.statSync(filePath);
-    const videoSize = stats.size;
+    try {
+        const stats = await fs.promises.stat(filePath);
+        const videoSize = stats.size;
 
-    console.log('Video size:', videoSize);
-    const parts = range.replace(/bytes=/, "").split("-");
-    const start = parseInt(parts[0], 10);
-    const end = start + 1000000; // 1MB chunk size
+        const parts = range.replace(/bytes=/, "").split("-");
+        const start = parseInt(parts[0], 10);
+        const end = Math.min(start + 1000000 - 1, videoSize - 1); // 1MB chunk size
 
-    const contentLength = end - start + 1;
-    
-    const headers = {
-        'Content-Range': `bytes ${start}-${end}/${videoSize}`,
-        'Accept-Ranges': 'bytes',
-        'Content-Length': contentLength,
-        'Content-Type': 'video/mp4',
-    };
+        const contentLength = (end - start) + 1;
 
-    res.writeHead(206, headers);
+        const headers = {
+            'Content-Range': `bytes ${start}-${end}/${videoSize}`,
+            'Accept-Ranges': 'bytes',
+            'Content-Length': contentLength,
+            'Content-Type': 'video/mp4',
+        };
 
-    const videoStream = fs.createReadStream(filePath, { start, end });
+        res.writeHead(206, headers);
 
-    videoStream.pipe(res);
-})
+        const videoStream = fs.createReadStream(filePath, { start, end });
 
+        videoStream.pipe(res);
+
+        videoStream.on('end', () => {
+            console.log(`Finished streaming ${fileName}`);
+        });
+
+        videoStream.on('error', (error) => {
+            console.error(`Error streaming video: ${error}`);
+            res.status(500).send('Error streaming video');
+        });
+    } catch (error) {
+        console.error(`Error accessing video file: ${error}`);
+        res.status(500).send('Error accessing video file');
+    }
+});
 
 app.listen(port, () => {
-    console.log(`Example app listening at http://localhost:${port}`)
-})
+    console.log(`Example app listening at http://localhost:${port}`);
+});
