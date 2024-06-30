@@ -59,7 +59,7 @@ app.get('/video/:videoId', async (req, res) => {
         videoStream.pipe(res);
 
         videoStream.on('end', () => {
-            console.log(`Finished streaming ${fileName}`);
+            console.log(`Finished streaming ===> ${fileName}`);
         });
 
         videoStream.on('error', (error) => {

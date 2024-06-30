@@ -68,6 +68,7 @@ var path_1 = __importDefault(require("path"));
 var cors_1 = __importDefault(require("cors"));
 var app = (0, express_1.default)();
 var port = 8000;
+// This is important that you may miss out on
 app.use((0, cors_1.default)({
     exposedHeaders: ['Content-Range', 'Accept-Ranges', 'Content-Length']
 }));
@@ -113,7 +114,7 @@ app.get('/video/:videoId', function (req, res) { return __awaiter(void 0, void 0
                 videoStream = fs.createReadStream(filePath, { start: start, end: end });
                 videoStream.pipe(res);
                 videoStream.on('end', function () {
-                    console.log("Finished streaming ".concat(fileName));
+                    console.log("Finished streaming ===> ".concat(fileName));
                 });
                 videoStream.on('error', function (error) {
                     console.error("Error streaming video: ".concat(error));
