@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 
-const VideoPlayer: React.FC<{ videoId: string| Number }> = ({videoId}) => {
+const VideoPlayer: React.FC<{ videoId: string | Number }> = ({ videoId }) => {
     const videoRef = useRef<HTMLVideoElement>(null);
     const [source, setSource] = useState('');
     const [rangeFrom, setRangeFrom] = useState(0);
@@ -15,16 +15,15 @@ const VideoPlayer: React.FC<{ videoId: string| Number }> = ({videoId}) => {
                     Range: `bytes=${rangeStart}-`, // Request a specific chunk of the video
                 },
             });
-    
-            console.log('Fetched video chunk:', response.data);
-            console.log('Content-Range:', response.headers['content-range'] || response.headers['Content-Range']);
-    
+
+            console.log('Fetched video chunk:', response);
+
             const videoBlob = new Blob([response.data], { type: 'video/mp4' });
             const video = URL.createObjectURL(videoBlob);
             setSource(video);
-    
+
             // Calculate the next start byte based on the chunk received
-            const contentRange = response.headers['content-range'] || response.headers['Content-Range'];
+            const contentRange = response.headers['content-range'];
             if (contentRange) {
                 const rangeEnd = parseInt(contentRange.split('/')[0].split('-')[1], 10);
                 setRangeFrom(rangeEnd + 1);
@@ -32,7 +31,7 @@ const VideoPlayer: React.FC<{ videoId: string| Number }> = ({videoId}) => {
         } catch (error) {
             console.error('Error fetching video:', error);
         }
-    };    
+    };
 
     useEffect(() => {
         fetchVideo(rangeFrom); // Initial request for the video from the start
@@ -49,10 +48,24 @@ const VideoPlayer: React.FC<{ videoId: string| Number }> = ({videoId}) => {
         }
     };
 
+    const handleCanPlayThrough = () => {
+        // Video is ready to start playing
+        console.log('Video can play through');
+    };
     return (
         <div className="video-player">
-            <video ref={videoRef} controls src={source} onSeeked={handleSeek} style={{ maxWidth: '600px', margin: '0 auto' }} />
-        </div>
+        {source ? (
+            <video
+                ref={videoRef}
+                controls
+                src={source}
+                style={{ maxWidth: '600px', margin: '0 auto' }}
+                onCanPlayThrough={handleCanPlayThrough}
+            />
+        ) : (
+            <p>Loading...</p>
+        )}
+    </div>
     );
 };
 
