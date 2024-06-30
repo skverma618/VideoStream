@@ -94,10 +94,12 @@ app.get('/video/:videoId', function (req, res) { return __awaiter(void 0, void 0
             case 1:
                 stats = _a.sent();
                 videoSize = stats.size;
+                console.log('Video size:', videoSize);
                 parts = range.replace(/bytes=/, "").split("-");
                 start = parseInt(parts[0], 10);
                 end = parts[1] ? parseInt(parts[1], 10) : videoSize - 1;
                 contentLength = end - start + 1;
+                console.log('Range:', start, end);
                 headers = {
                     'Content-Range': "bytes ".concat(start, "-").concat(end, "/").concat(videoSize),
                     'Accept-Ranges': 'bytes',

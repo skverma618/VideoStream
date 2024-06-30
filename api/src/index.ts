@@ -33,11 +33,14 @@ app.get('/video/:videoId', async (req, res) => {
 
     const stats = await fs.statSync(filePath);
     const videoSize = stats.size;
+
+    console.log('Video size:', videoSize);
     const parts = range.replace(/bytes=/, "").split("-");
     const start = parseInt(parts[0], 10);
-    const end = parts[1] ? parseInt(parts[1], 10) : videoSize - 1;
+    const end = start + 1000000; // 1MB chunk size
 
     const contentLength = end - start + 1;
+    
     const headers = {
         'Content-Range': `bytes ${start}-${end}/${videoSize}`,
         'Accept-Ranges': 'bytes',
