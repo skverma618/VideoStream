@@ -17,12 +17,20 @@ const CustomVideoPlayer = ({ }) => {
     const [buffered, setBuffered] = useState(0);
     const [showSettings, setShowSettings] = useState(false);
     const [playbackRate, setPlaybackRate] = useState(1);
+    const [currentTime, setCurrentTime] = useState(0);
+    const [duration, setDuration] = useState(0);
+    const [showVolumeBar, setShowVolumeBar] = useState(false);
 
     useEffect(() => {
         const video = videoRef.current;
 
         const handleTimeUpdate = () => {
             setProgress((video.currentTime / video.duration) * 100);
+            setCurrentTime(video.currentTime);
+        };
+
+        const handleLoadedMetadata = () => {
+            setDuration(video.duration);
         };
 
         const handleProgress = () => {
@@ -32,11 +40,15 @@ const CustomVideoPlayer = ({ }) => {
             }
         };
 
+        // IMPORTANT: Add event listeners inside useEffect to avoid memory leaks
         video.addEventListener('timeupdate', handleTimeUpdate);
+        video.addEventListener('loadedmetadata', handleLoadedMetadata);
         video.addEventListener('progress', handleProgress);
 
+        // IMPORTANT: Remove event listeners when the component is unmounted to avoid memory leaks
         return () => {
             video.removeEventListener('timeupdate', handleTimeUpdate);
+            video.removeEventListener('loadedmetadata', handleLoadedMetadata);
             video.removeEventListener('progress', handleProgress);
         };
     }, []);
@@ -92,6 +104,12 @@ const CustomVideoPlayer = ({ }) => {
         setShowSettings(false);
     };
 
+    const formatTime = (time) => {
+        const minutes = Math.floor(time / 60);
+        const seconds = Math.floor(time % 60);
+        return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    };
+
     return (
         <div className={`relative ${isFullscreen ? 'fixed inset-0 z-50 bg-black' : 'max-w-4xl mx-auto'}`}>
             <video
@@ -120,20 +138,36 @@ const CustomVideoPlayer = ({ }) => {
                         </button>
 
                         {/* Volume */}
-                        <div className='flex items-center'>
-                            <button onClick={toggleMute} className="p-2">
+                        <div className='flex items-center'
+                            onMouseEnter={() => setShowVolumeBar(true)}
+                            onMouseLeave={() => setShowVolumeBar(false)}
+                        >
+                            <button
+                                onClick={toggleMute}
+                                className="p-2"
+                            >
                                 {isMuted || volume === 0 ? <MdVolumeOff className="text-xl" /> : <FaVolumeUp className="text-xl" />}
                             </button>
-                            <input
-                                type="range"
-                                min="0"
-                                max="1"
-                                step="0.01"
-                                value={volume}
-                                onChange={handleVolumeChange}
-                                className="w-24 h-1 bg-gray-700 appearance-none cursor-pointer"
-                                style={{ background: `linear-gradient(to right, #e5e7eb ${volume * 100}%, #4b5563 ${volume * 100}%)` }}
-                            />
+                            {/* <div> */}
+                            {showVolumeBar && (
+                                <input
+                                    type="range"
+                                    min="0"
+                                    max="1"
+                                    step="0.01"
+                                    value={volume}
+                                    onChange={handleVolumeChange}
+                                    className="w-24 h-1 bg-gray-700 appearance-none cursor-pointer"
+                                    style={{ background: `linear-gradient(to right, #e5e7eb ${volume * 100}%, #4b5563 ${volume * 100}%)` }}
+                                />
+                            )}
+                            {/* </div> */}
+
+                        </div>
+
+                        {/* Time */}
+                        <div className="ml-4">
+                            <span>{formatTime(currentTime)} / {formatTime(duration)}</span>
                         </div>
                     </div>
                     <div>

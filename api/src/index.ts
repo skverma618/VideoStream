@@ -21,9 +21,11 @@ app.get('/', (req, res) => {
     res.send('Video Stream API Running!!');
 });
 
-app.get('/api/video/:videoId/:resolution', async (req, res) => {
+app.get('/api/video/:videoId/:resolution?', async (req, res) => {
     const videoId = req.params.videoId || '1';
     const resolution = req.params.resolution || '480p';
+
+    console.log(`resolution: ${resolution}`);
     const range = req.headers.range;
 
     if (!videoId) {
@@ -38,8 +40,10 @@ app.get('/api/video/:videoId/:resolution', async (req, res) => {
     const videoDirectory = 'videos';
     const fileName = `${resolution}.${type}`;
 
+    console.log(`fileName: ${fileName}`);
     const filePath = path.join(currentDir, videoDirectory, videoId, fileName);
 
+    console.log(`filePath: ${filePath}`);
     try {
         const stats = await fs.promises.stat(filePath);
         const videoSize = stats.size;
@@ -64,7 +68,7 @@ app.get('/api/video/:videoId/:resolution', async (req, res) => {
         videoStream.pipe(res);
 
         videoStream.on('end', () => {
-            console.log(`Finished streaming ===> ${fileName}`);
+            // console.log(`Finished streaming ===> ${fileName}`);
         });
 
         videoStream.on('error', (error) => {

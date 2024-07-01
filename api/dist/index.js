@@ -79,12 +79,14 @@ var currentDir = __dirname;
 app.get('/', function (req, res) {
     res.send('Video Stream API Running!!');
 });
-app.get('/api/video/:videoId', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var videoId, range, videoDirectory, fileName, filePath, stats, videoSize, parts, start, end, contentLength, headers, videoStream, error_1;
+app.get('/api/video/:videoId/:resolution?', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var videoId, resolution, range, type, videoDirectory, fileName, filePath, stats, videoSize, parts, start, end, contentLength, headers, videoStream, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                videoId = req.params.videoId;
+                videoId = req.params.videoId || '1';
+                resolution = req.params.resolution || '480p';
+                console.log("resolution: ".concat(resolution));
                 range = req.headers.range;
                 if (!videoId) {
                     return [2 /*return*/, res.status(400).send('No videoId provided')];
@@ -92,9 +94,12 @@ app.get('/api/video/:videoId', function (req, res) { return __awaiter(void 0, vo
                 if (!range) {
                     return [2 /*return*/, res.status(416).send('Range not satisfied')];
                 }
+                type = "mp4";
                 videoDirectory = 'videos';
-                fileName = "Creating a Powerful Admin Panel with admin.js.mp4";
-                filePath = path_1.default.join(currentDir, videoDirectory, fileName);
+                fileName = "".concat(resolution, ".").concat(type);
+                console.log("fileName: ".concat(fileName));
+                filePath = path_1.default.join(currentDir, videoDirectory, videoId, fileName);
+                console.log("filePath: ".concat(filePath));
                 _a.label = 1;
             case 1:
                 _a.trys.push([1, 3, , 4]);
@@ -116,7 +121,7 @@ app.get('/api/video/:videoId', function (req, res) { return __awaiter(void 0, vo
                 videoStream = fs.createReadStream(filePath, { start: start, end: end });
                 videoStream.pipe(res);
                 videoStream.on('end', function () {
-                    console.log("Finished streaming ===> ".concat(fileName));
+                    // console.log(`Finished streaming ===> ${fileName}`);
                 });
                 videoStream.on('error', function (error) {
                     console.error("Error streaming video: ".concat(error));
