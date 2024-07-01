@@ -6,8 +6,8 @@ import { FaUserCircle } from "react-icons/fa";
 import { IoIosNotificationsOutline } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import { RxHamburgerMenu } from "react-icons/rx";
-import { toggleMenu } from "../ultils/appSlice";
-import { YOUTUBE_SUGGESTION_API } from "../ultils/Constants";
+import { toggleMenu } from "../utils/appSlice";
+import { YOUTUBE_SUGGESTION_API } from "../utils/Constants";
 import { CiSearch } from "react-icons/ci";
 import { Link, useNavigate } from "react-router-dom";
 

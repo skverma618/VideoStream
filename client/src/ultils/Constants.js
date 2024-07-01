@@ -1,6 +1,0 @@
-export const YOUTUBE_SUGGESTION_API=""
-export const YOUTUBE_COMMENTS_API=""
-export const YOUTUBE_CHANNEL_DATA=""
-export const VIDEO_DATA=""
-export const YOUTUBE_SEARCH_RESULT_VIDEOS=""
-export const YOUTUBE_VIDEO_API=""

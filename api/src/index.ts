@@ -2,6 +2,8 @@ import express from 'express';
 import * as fs from 'fs';
 import path from 'path';
 import cors from 'cors';
+import { uploadVideo } from './controllers/Admin';
+import { upload } from './middlewares/MulterMiddleware';
 
 const app = express();
 const port = 8000;
@@ -19,8 +21,9 @@ app.get('/', (req, res) => {
     res.send('Video Stream API Running!!');
 });
 
-app.get('/video/:videoId', async (req, res) => {
-    const { videoId } = req.params;
+app.get('/api/video/:videoId/:resolution', async (req, res) => {
+    const videoId = req.params.videoId || '1';
+    const resolution = req.params.resolution || '480p';
     const range = req.headers.range;
 
     if (!videoId) {
@@ -31,9 +34,11 @@ app.get('/video/:videoId', async (req, res) => {
         return res.status(416).send('Range not satisfied');
     }
 
+    const type = "mp4";
     const videoDirectory = 'videos';
-    const fileName = `Creating a Powerful Admin Panel with admin.js.mp4`;
-    const filePath = path.join(currentDir, videoDirectory, fileName);
+    const fileName = `${resolution}.${type}`;
+
+    const filePath = path.join(currentDir, videoDirectory, videoId, fileName);
 
     try {
         const stats = await fs.promises.stat(filePath);
@@ -71,6 +76,9 @@ app.get('/video/:videoId', async (req, res) => {
         res.status(500).send('Error accessing video file');
     }
 });
+
+
+app.post('/api/upload', upload.single('video'), uploadVideo);
 
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`);

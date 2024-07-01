@@ -3,9 +3,11 @@ import { FaPlay, FaPause, FaVolumeUp, FaVolumeMute, FaExpand, FaCompress } from 
 import { IoMdSettings } from 'react-icons/io';
 import { MdVolumeOff } from 'react-icons/md';
 import 'tailwindcss/tailwind.css';
+import { API_URL } from '../../utils/Constants';
 
 const CustomVideoPlayer = ({ }) => {
-    const videoUrl = 'http://localhost:8000/video/1';
+    const videoUrl = API_URL + 'video/1';
+    console.log(videoUrl);
     const videoRef = useRef(null);
     const [isPlaying, setIsPlaying] = useState(false);
     const [isFullscreen, setIsFullscreen] = useState(false);
@@ -107,7 +109,7 @@ const CustomVideoPlayer = ({ }) => {
                     onChange={handleProgressChange}
                     className="w-full h-1 bg-gray-600 appearance-none cursor-pointer"
                     style={{
-                        background: `linear-gradient(to right, #e5e7eb ${progress}%, #4b5563 ${progress}%, #a0aec0 ${buffered}%, #4b5563 ${buffered}%)`
+                        background: `linear-gradient(to right, red ${progress}%, #a0aec0 ${progress}%, #a0aec0 ${buffered}%, #4b5563 ${buffered}%)`
                     }}
                 />
                 <div className="flex items-center justify-between mt-2">

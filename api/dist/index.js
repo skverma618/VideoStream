@@ -66,6 +66,8 @@ var express_1 = __importDefault(require("express"));
 var fs = __importStar(require("fs"));
 var path_1 = __importDefault(require("path"));
 var cors_1 = __importDefault(require("cors"));
+var Admin_1 = require("./controllers/Admin");
+var MulterMiddleware_1 = require("./middlewares/MulterMiddleware");
 var app = (0, express_1.default)();
 var port = 8000;
 // This is important that you may miss out on
@@ -77,7 +79,7 @@ var currentDir = __dirname;
 app.get('/', function (req, res) {
     res.send('Video Stream API Running!!');
 });
-app.get('/video/:videoId', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+app.get('/api/video/:videoId', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var videoId, range, videoDirectory, fileName, filePath, stats, videoSize, parts, start, end, contentLength, headers, videoStream, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -130,6 +132,7 @@ app.get('/video/:videoId', function (req, res) { return __awaiter(void 0, void 0
         }
     });
 }); });
+app.post('/api/upload', MulterMiddleware_1.upload.single('video'), Admin_1.uploadVideo);
 app.listen(port, function () {
     console.log("Example app listening at http://localhost:".concat(port));
 });
