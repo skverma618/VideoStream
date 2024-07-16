@@ -10,6 +10,7 @@ import VideoComments from "./VideoComments";
 import SideVideos from "./SideVideos";
 import { YOUTUBE_SEARCH_RESULT_VIDEOS } from "../../utils/Constants";
 import CustomVideoPlayer from "./CustomVideoPlayer";
+import VideoPlayer from "./VideoPlayer";
 
 const WatchPage = () => {
   const [comments, setComments] = useState([]);
@@ -90,7 +91,8 @@ const WatchPage = () => {
     <div className={` flex mt-14 mr-5 ${isMenuOpen ? "ml-48" : "ml-16"}`}>
       <div className="w-[59%]">
         {/* <VideoFrame videoId={videoId} /> */}
-        <CustomVideoPlayer videoId={videoId} />
+        {/* <CustomVideoPlayer videoId={videoId} /> */}
+        <VideoPlayer />
         {/* <VideoData snippet={snippet} statistics={statistics} /> */}
         {/* <VideoDescription data={{ snippet, showFull, showLess }} /> */}
         {/* {comments.length > 0 ? (

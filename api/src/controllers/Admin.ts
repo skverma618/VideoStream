@@ -62,7 +62,7 @@ export const uploadVideo = async (req: any, res: any) => {
 
     const videoId = uuidv4();
     const videoPath = req.file.path;
-    const outputPath = `./uploads/hls-videos/${videoId}`
+    const outputPath = `./videos/${videoId}`
     const hlsPath = `${outputPath}/playlist.m3u8` // HLS is a unstiched video file and index.m3u8 work as index for video chunks
 
     if(!fs.existsSync(outputPath)){
@@ -89,7 +89,7 @@ export const uploadVideo = async (req: any, res: any) => {
 
         fs.copyFileSync('./playlist.m3u8', `${outputPath}/playlist.m3u8`);
 
-        const videoUrl = `http://localhost:8000/uploads/hls-videos/${videoId}/playlist.m3u8`
+        const videoUrl = `http://localhost:8000/videos/${videoId}/playlist.m3u8`
 
         try{
             storelink(videoUrl);
