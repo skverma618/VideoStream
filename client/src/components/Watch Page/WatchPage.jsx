@@ -91,8 +91,8 @@ const WatchPage = () => {
     <div className={` flex mt-14 mr-5 ${isMenuOpen ? "ml-48" : "ml-16"}`}>
       <div className="w-[59%]">
         {/* <VideoFrame videoId={videoId} /> */}
-        {/* <CustomVideoPlayer videoId={videoId} /> */}
-        <VideoPlayer />
+        <CustomVideoPlayer videoId={videoId} />
+        {/* <VideoPlayer /> */}
         {/* <VideoData snippet={snippet} statistics={statistics} /> */}
         {/* <VideoDescription data={{ snippet, showFull, showLess }} /> */}
         {/* {comments.length > 0 ? (

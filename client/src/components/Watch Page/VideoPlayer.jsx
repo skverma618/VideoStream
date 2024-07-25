@@ -8,7 +8,7 @@ export const VideoPlayer = (props) => {
   const videoRef = useRef(null);
   const playerRef = useRef(null);
   // const { videoSource } = props;
-  const  videoSource = "http://localhost:8000/videos/67baf084-e06d-4ceb-b3aa-4b9f7023fcaa/playlist.m3u8";
+  const  videoSource = "http://localhost:8000/videos/f9699059-912e-457f-bcdd-f43991a8251d/playlist.m3u8";
 
   const videoPlayerOptions = {
     fluid: true,
