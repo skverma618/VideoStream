@@ -7,7 +7,7 @@ import { API_URL } from '../../utils/Constants';
 
 const CustomVideoPlayer = ({ }) => {
     // const videoUrl = API_URL + 'video/1';
-    const videoUrl = 'http://localhost:8000/videos/1ff2d61d-a4d8-4bbe-8a45-4220ffa3d6a0/playlist.m3u8';
+    const videoUrl = 'http://localhost:8000/videos/587a4d55-661f-4a2c-b3d1-b3c4dfbfbfde/playlist.m3u8';
     console.log(videoUrl);
     const videoRef = useRef(null);
     const [isPlaying, setIsPlaying] = useState(false);

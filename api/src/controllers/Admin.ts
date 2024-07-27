@@ -36,7 +36,7 @@ export const upload = async (req: any, res: any) => {
         const promises = resolutions.map((res) => {
             const originalnameArray = file.originalname.split('.');
             const videoType = originalnameArray[originalnameArray.length - 1];
-            const outputPath = path.join(__dirname, '..', 'videos', `${file.filename.split('.')[0]}_${res.suffix}.${videoType}`);
+            const outputPath = path.join(__dirname, '..', 'media', 'videos', `${file.filename.split('.')[0]}_${res.suffix}.${videoType}`);
             return convertVideo(file.path, outputPath, res.resolution);
         });
 
@@ -61,7 +61,7 @@ export const uploadVideo = async (req: any, res: any) => {
 
     const videoId = uuidv4();
     const videoPath = path.resolve(req.file.path); // Ensure absolute path
-    const outputPath = path.resolve(`./src/videos/${videoId}`);
+    const outputPath = path.resolve(`./media/videos/${videoId}`);
     const hlsPath = `${outputPath}/playlist.m3u8`;
 
     if (!fs.existsSync(outputPath)) {
@@ -83,7 +83,7 @@ export const uploadVideo = async (req: any, res: any) => {
         console.log(`stdout: ${stdout}`);
         console.log(`stderr: ${stderr}`);
 
-        const videoUrl = `http://localhost:8000/videos/${videoId}/playlist.m3u8`;
+        const videoUrl = `http://localhost:8000/media/videos/${videoId}/playlist.m3u8`;
 
         try {
             storelink(videoUrl);

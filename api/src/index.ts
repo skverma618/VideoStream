@@ -4,18 +4,26 @@ import path from 'path';
 import cors from 'cors';
 import { uploadVideo } from './controllers/Admin';
 import { upload } from './middlewares/MulterMiddleware';
+import serveIndex from 'serve-index';
 
 const app = express();
 const port = 8000;
 
-// This is important that you may miss out on
+// Enable CORS for all origins
 app.use(cors({
+    origin: '*',
     exposedHeaders: ['Content-Range', 'Accept-Ranges', 'Content-Length']
 }));
 
 app.use(express.json());
 
 const currentDir = __dirname;
+
+// Make the videos folder publicly accessible
+const videoDirectory = path.join(currentDir, '..', 'media', 'videos');
+app.use('/videos', express.static(videoDirectory), serveIndex(videoDirectory, { icons: true }));
+
+// app.use('/videos', express.static(path.join(currentDir, 'videos')));
 
 app.get('/', (req, res) => {
     res.send('Video Stream API Running!!');
@@ -80,7 +88,6 @@ app.get('/api/video/:videoId/:resolution?', async (req, res) => {
         res.status(500).send('Error accessing video file');
     }
 });
-
 
 app.post('/api/upload', upload.single('video'), uploadVideo);
 

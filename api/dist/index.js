@@ -68,14 +68,20 @@ var path_1 = __importDefault(require("path"));
 var cors_1 = __importDefault(require("cors"));
 var Admin_1 = require("./controllers/Admin");
 var MulterMiddleware_1 = require("./middlewares/MulterMiddleware");
+var serve_index_1 = __importDefault(require("serve-index"));
 var app = (0, express_1.default)();
 var port = 8000;
-// This is important that you may miss out on
+// Enable CORS for all origins
 app.use((0, cors_1.default)({
+    origin: '*',
     exposedHeaders: ['Content-Range', 'Accept-Ranges', 'Content-Length']
 }));
 app.use(express_1.default.json());
 var currentDir = __dirname;
+// Make the videos folder publicly accessible
+var videoDirectory = path_1.default.join(currentDir, '..', 'media', 'videos');
+app.use('/videos', express_1.default.static(videoDirectory), (0, serve_index_1.default)(videoDirectory, { icons: true }));
+// app.use('/videos', express.static(path.join(currentDir, 'videos')));
 app.get('/', function (req, res) {
     res.send('Video Stream API Running!!');
 });
