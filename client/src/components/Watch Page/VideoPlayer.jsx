@@ -1,32 +1,79 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import videojs from 'video.js';
 import 'video.js/dist/video-js.css';
 
-export const VideoPlayer = (props) => {
+// FOR MORE VIDEO PLAYER OPTIONS, VISIT: https://videojs.com/guides/options/
+
+export const VideoPlayer = () => {
   const videoRef = React.useRef(null);
   const playerRef = React.useRef(null);
 
+  const thumbnail = 'https://www.animenewsnetwork.com/hotlink/thumbnails/crop1200x630gNE/youtube/wm0pDk3HChM.jpg';
+  const videoUrl = 'http://localhost:8000/videos/587a4d55-661f-4a2c-b3d1-b3c4dfbfbfde/playlist.m3u8';
+
   const onReady = (player) => {
     console.log('Player is ready');
+  };
+
+  const myClickHandler = (event) => {
+    // `this` is the player in this context
+
+    if (this.isFullscreen()) {
+      this.exitFullscreen();
+    } else {
+      this.requestFullscreen();
+    }
   };
 
   const options = {
     autoplay: false,
     controls: true,
     playbackRates: [0.5, 1, 1.5, 2],
+    height: 400,
+    responsive: true,
+    breakpoints: {
+      tiny: 300,
+      xsmall: 400,
+      small: 500,
+      medium: 600,
+      large: 700,
+      xlarge: 800,
+      huge: 900
+    },
+    enableSmoothSeeking: true,
+    poster: thumbnail,
     controlBar: {
       playToggle: true,
       volumePanel: {
         inline: false
       },
+      skipButtons: {
+        forward: 10,
+        backward: 10
+      },
       fullscreenToggle: true
     },
     sources: [{
-      src: 'http://localhost:8000/videos/587a4d55-661f-4a2c-b3d1-b3c4dfbfbfde/playlist.m3u8',
+      src: videoUrl,
       type: 'application/x-mpegURL'
-    }]
+    }],
+    userActions: {
+      hotkeys: function (event) {
+        // if playing, `space` key = pause
+        if (event.which === 32) {
+          if (!this.paused()) {
+            this.pause();
+          } else {
+            this.play();
+          }
+        }
+      }
+    }
+    // preload: false, // Suggests to the browser whether or not the video data should begin downloading as soon as the <video> element is loaded.
+    // aspectRatio: '16:9',
+    // preferFullWindow: true,// If true, the player will always be in full window mode, usefull for iphone
+    // userActions: { click: myClickHandler },
   };
-  const videoUrl = 'http://localhost:8000/videos/587a4d55-661f-4a2c-b3d1-b3c4dfbfbfde/playlist.m3u8';
 
   useEffect(() => {
 
@@ -43,8 +90,8 @@ export const VideoPlayer = (props) => {
         onReady && onReady(player);
       });
 
-    // You could update an existing player in the `else` block here
-    // on prop change, for example:
+      // You could update an existing player in the `else` block here
+      // on prop change, for example:
     } else {
       const player = playerRef.current;
 
@@ -67,12 +114,12 @@ export const VideoPlayer = (props) => {
 
   return (
     <div data-vjs-player
-    style={{
-      width: '600px',
-    }}>
-      <div 
-      ref={videoRef} 
-      className=''
+      style={{
+        width: '600px',
+      }}>
+      <div
+        ref={videoRef}
+        className=''
       />
     </div>
   );

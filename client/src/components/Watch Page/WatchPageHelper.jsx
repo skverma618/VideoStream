@@ -37,13 +37,16 @@ const WatchPageHelper = () => {
 
   const isMenuOpen = useSelector((store) => store.app.isMenuOpen);
 
+  const thumbnail = 'https://www.animenewsnetwork.com/hotlink/thumbnails/crop1200x630gNE/youtube/wm0pDk3HChM.jpg';
+  const videoUrl = 'http://localhost:8000/videos/587a4d55-661f-4a2c-b3d1-b3c4dfbfbfde/playlist.m3u8';
+
   console.log("watch page")
   return (
     <div className={` flex mt-14 mr-5 ${isMenuOpen ? "ml-48" : "ml-16"}`}>
       <div className="w-[59%]">
         {/* <VideoFrame videoId={videoId} /> */}
-        <CustomVideoPlayer videoId={videoId} />
-        <VideoPlayer />
+        {/* <CustomVideoPlayer videoId={videoId} /> */}
+        <VideoPlayer thumbnail={thumbnail} videoUrl={videoUrl}/>
         {/* <VideoData snippet={snippet} statistics={statistics} /> */}
         {/* <VideoDescription data={{ snippet, showFull, showLess }} /> */}
         {/* {comments.length > 0 ? (
