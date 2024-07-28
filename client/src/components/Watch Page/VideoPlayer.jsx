@@ -59,6 +59,8 @@ export const VideoPlayer = () => {
     }],
     userActions: {
       hotkeys: function (event) {
+        // key reference: https://docstore.mik.ua/orelly/webprog/DHTML_javascript/0596004672_jvdhtmlckbk-app-b.html
+
         // if playing, `space` key = pause
         if (event.which === 32) {
           if (!this.paused()) {
@@ -67,12 +69,49 @@ export const VideoPlayer = () => {
             this.play();
           }
         }
+
+        // `f` key = fullscreen
+        if (event.which === 70) {
+          if (this.isFullscreen()) {
+            this.exitFullscreen();
+          } else {
+            this.requestFullscreen();
+          }
+        }
+
+        // `m` key = mute
+        if (event.which === 77) {
+          if (this.muted()) {
+            this.muted(false);
+          } else {
+            this.muted(true);
+          }
+        }
+
+        // arrow keys to seek video and adjust volume
+        if (event.which === 37) {
+          this.currentTime(this.currentTime() - 10);
+        }
+
+        if (event.which === 39) {
+          this.currentTime(this.currentTime() + 10);
+        }
+
+        if (event.which === 38) {
+          this.volume(this.volume() + 0.1);
+        }
+
+        if (event.which === 40) {
+          this.volume(this.volume() - 0.1);
+        }
       }
     }
     // preload: false, // Suggests to the browser whether or not the video data should begin downloading as soon as the <video> element is loaded.
     // aspectRatio: '16:9',
     // preferFullWindow: true,// If true, the player will always be in full window mode, usefull for iphone
     // userActions: { click: myClickHandler },
+    // fluid: true,
+    // spatialNavigation: { enabled: true }
   };
 
   useEffect(() => {
