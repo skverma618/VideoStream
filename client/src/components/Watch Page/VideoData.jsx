@@ -7,6 +7,7 @@ import { AiOutlineDislike } from "react-icons/ai";
 import { AiOutlineLike } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import { YOUTUBE_CHANNEL_DATA } from "../../utils/Constants";
+import { formatViews } from "../../utils/formatData";
 
 const VideoData = ({ snippet, statistics }) => {
   // console.log(snippet);
@@ -14,7 +15,7 @@ const VideoData = ({ snippet, statistics }) => {
   const [channelData, setChannelData] = useState([]);
 
   const getChannelLogo = async () => {
-    const data = await fetch(YOUTUBE_CHANNEL_DATA + "&id=" + snippet.channelId);
+    const data = await fetch(YOUTUBE_CHANNEL_DATA + "&id=" + snippet?.channelData?.channelId);
     const json = await data.json();
     // console.log(json.items);
     setChannelData(json.items);
@@ -23,29 +24,33 @@ const VideoData = ({ snippet, statistics }) => {
     getChannelLogo();
   }, []);
 
+  console.log(snippet?.thumbnails?.high?.url);
   return (
     <div className="video-data flex flex-col w-full">
       <h1 className="video-title font-semibold text-xl">{snippet.title}</h1>
 
       <div className="flex items-center justify-between">
         <div className="channel-logo-subscribeBtn flex w-full my-3 items-center gap-4">
-          <Link to={"/channelPage?id=" + snippet.channelId}>
+          <Link to={"/channelPage?id=" + snippet?.channelData?.channelId}>
             <img
               src={
-                channelData.length > 0
-                  ? channelData[0].snippet.thumbnails.high.url
-                  : "none"
+                snippet?.thumbnails?.high?.url || "none"
               }
               alt="channel-logo"
               className="w-12 h-12 rounded-full"
             />
           </Link>
-          <Link to={"/channelPage?id=" + snippet.channelId}>
+          <div className="flex flex-col">
+          <Link to={"/channelPage?id=" + snippet?.channelData?.channelId}>
             <span className="font-bold flex items-center text-xl gap-1">
-              {snippet.channelTitle}
+              {snippet?.channelData?.channelTitle}
               <IoMdCheckmarkCircle className="mt-1 text-gray-600" />
             </span>
           </Link>
+            <span className="text-gray-500 text-sm">
+              {formatViews(snippet?.channelData?.channelSubscriberCount)} subscribers
+            </span>
+          </div>
           <button className="bg-black text-white px-4 py-2 font-medium text-[0.9rem] rounded-3xl">
             Subscribe
           </button>
