@@ -155,6 +155,7 @@ export const VideoPlayer = () => {
     <div data-vjs-player
       style={{
         width: '600px',
+        marginBottom: '14px'
       }}>
       <div
         ref={videoRef}
