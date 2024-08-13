@@ -29,7 +29,8 @@ export const VideoPlayer = () => {
     autoplay: false,
     controls: true,
     playbackRates: [0.5, 1, 1.5, 2],
-    height: 400,
+    // height: 400,
+    width: 950,
     responsive: true,
     breakpoints: {
       tiny: 300,
@@ -123,7 +124,7 @@ export const VideoPlayer = () => {
 
       videoElement.classList.add('vjs-big-play-centered');
       videoRef.current.appendChild(videoElement);
-      
+
       const player = playerRef.current = videojs(videoElement, options, () => {
         videojs.log('player is ready');
         onReady && onReady(player);
@@ -154,8 +155,9 @@ export const VideoPlayer = () => {
   return (
     <div data-vjs-player
       style={{
-        width: '600px',
-        marginBottom: '14px'
+        marginBottom: '14px',
+        border: '1px solid #ccc',
+        borderRadius: '8px',
       }}>
       <div
         ref={videoRef}

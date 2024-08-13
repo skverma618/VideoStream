@@ -77,20 +77,20 @@ const Heading = () => {
           <input
             type="text"
             placeholder="Search"
-            className="border-2 border-gray-300 w-full  rounded-l-full py-[0.4rem] px-3"
+            className="border border-gray-300 w-full  rounded-l-full py-[0.4rem] px-3"
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
             onFocus={() => setShowSuggestion(true)}
             onKeyDown={(e) => handleEnter(e)}
-            // onClick={() => setShowSuggestion(true)}
+          // onClick={() => setShowSuggestion(true)}
           />
           <IoIosSearch
-            className=" bg-gray-200 text-[2.5rem] py-1 px-2 rounded-r-full hover:cursor-pointer active:bg-black active:text-white transition-all"
+            className="border border-gray-300 bg-gray-200 text-[2.5rem] py-1 px-2 rounded-r-full hover:cursor-pointer active:bg-black active:text-white transition-all"
             onClick={onSearchBtnClick}
           />
           <MdKeyboardVoice className=" bg-gray-200 text-[2.5rem] p-2 ml-5 rounded-full" />
         </div>
-        <div className="videoadd-notification-user justify-around flex items-center gap-6">
+        <div className="videoadd-notification-user cursor-pointer justify-around flex items-center gap-6">
           <RiVideoAddFill className="text-[1.4rem]" />
           <IoIosNotificationsOutline className="text-[1.4rem]" />
           <FaUserCircle className="text-[1.4rem]" />
@@ -99,16 +99,16 @@ const Heading = () => {
 
       <div
         className="suggestions w-[35rem] ml-[28rem] rounded-xl shadow-xl px-1 absolute bg-white top-14"
-        // onTouchMove={setShowSuggestion(true)}
+      // onTouchMove={setShowSuggestion(true)}
       >
         {showSuggestion &&
-          suggestions.map((suggestion) => (
+          suggestions?.map((suggestion) => (
             <Link
               to={`/search?result=` + suggestion}
               onClick={handleClick}
               key={suggestion}
             >
-              <p className="my-2 p-2 hover:bg-gray-100 hover:cursor-pointer">
+              <p className="my-2 p-2 hover:bg-gray-100">
                 <span className="flex items-center gap-2">
                   <CiSearch className="mt-1" />
                   {suggestion}
